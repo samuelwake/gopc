@@ -1,0 +1,9 @@
+{
+    "lldb.displayFormat": "auto",
+    "lldb.showDisassembly": "always",
+    "lldb.dereferencePointers": true,
+    "lldb.consoleMode": "commands",
+    "files.associations": {
+        "meta.h": "c"
+    }
+}
