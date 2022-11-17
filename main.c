@@ -13,6 +13,7 @@ int main(int argc, const char ** argv){
     def(const char*, u, "asdasd");
     puts(u);
     token * t;
+    int t;
     //checks if argc is at least 2
     //this is to prevent a buffer overflow / segfault 
     //because the compiler doesn't like empty strings
