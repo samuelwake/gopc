@@ -18,7 +18,7 @@ const char * read(const char * argv2f){
 
     return (const char*)rBuffer;
 }
-
+//hola
 vec_ gen_vec(types * _types, int items,  ...){
     vec_ newvec = (vec_)malloc(sizeof(char*));
     va_list args;
