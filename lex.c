@@ -1,4 +1,5 @@
 #include "lex.h"
+#include <stdarg.h>
 
 const char * read(const char * argv2f){
     //reads input file
@@ -18,6 +19,28 @@ const char * read(const char * argv2f){
     return (const char*)rBuffer;
 }
 
+vec_ gen_vec(int items, types _types[], ...){
+    vec_ newvec = (vec_)malloc(sizeof(char*));
+    va_list args;
+    va_start(args, _types);
+    
+    for(int count = 0; (_msize(_types) / sizeof(_types[0])) > count; count++) 
+    {
+        switch(_types[count]){
+            case _int: 
+            vec_push(newvec, int, va_arg(args, int));
+            break;
+            case _char_p: 
+            vec_push(newvec, char*, va_arg(args, char*));
+            break;
+            case _token: 
+            vec_push(newvec, token, va_arg(args, token));
+            break;
+        }
+    }
+
+    return newvec;
+}
 //matches individual character tokens to token enum
 //recursively adds them to token * list
 token* matchCTokens(const char * stream, token * list, int p_inc){
@@ -35,30 +58,25 @@ token* matchCTokens(const char * stream, token * list, int p_inc){
         case '}' : *(list+p_inc) = end; break;
         case '[' : *(list+p_inc) = arr_open; break;
         case ']' : *(list+p_inc) = arr_open; break;
-        default : *(list+p_inc) = arr_open; break;
+        default : *(list+p_inc) = 2; break;
     }
+ 
     //condition for recursion:
     //when recursion is finished, return the changed token list 
     return (size_t)p_inc < len ? matchCTokens(stream, list, p_inc+1) : list;
 }
 
-vec gen_vec(void* stream){
-
-    static int count = 0;
-    vec vector = (vec)realloc(vector, count*sizeof(stream)); 
-
-    if(infer(stream) == _char_p) *(const char**)vector = stream;
-    else if(infer(stream) == _token) *(token*)vector = (token)stream;
-    else printf("no ");
-
-
-    count++;
-    return vector;
-}
 
 #ifdef __GNUC__
 inline
 #endif 
 void free_read_tokens(token * list) {
     free(list);
+}
+
+#ifdef __GNUC__
+inline
+#endif 
+void destroy_vec(vec_ vector) {
+    free(vector);
 }

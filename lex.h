@@ -1,7 +1,8 @@
+#pragma once
 #include <stdio.h>
 #include <stdlib.h>
 //once-overs the header--that way, the compiler doesn't accuse me of redefining things!!
-#pragma once
+
 //enumerates types so I can use them in if-statements with the infer macro below
 typedef enum {
     _int,
@@ -10,15 +11,17 @@ typedef enum {
     _bool,
     _float,
     _void_p,
+    d_void_p,
     _token
 } types;
 //infers type of input and outputs a number that corresponds with enum provided above
-#define infer(x) _Generic((x), int:_int, char:_char, \
-    char*:_char_p, bool:_bool, token:_token, \
-    float:_float, void*:_void_p\
+#define infer(x) _Generic((x), \
+    int:_int, char:_char, \
+    char*:_char_p, bool:_bool, \
+    token:_token, float:_float, \
+    void*:_void_p, void**:d_void_p \
 )
 
-#define def(x,y,z) x y = z
 //assign int values to tokens 
 // -- to be used in switch-statement in lex.c
 typedef enum tokens {
@@ -52,12 +55,19 @@ typedef union{
     const char* str;
 } token_str;
 //prototype for vector type
-typedef void ** vec;
+typedef void ** vec_;
+
+#define vec_push(vector, type, item) { \
+    vector = (vec_)realloc(vector, _msize(vector) + sizeof(type)); \
+    size_t len = _msize(vector) / sizeof(vector[0]) - 1; \
+    *(type*)(vector + len) = item; \
+ }
 
 //function declarations for lex.c
 const char * read(const char *);
 token * matchCTokens(const char*, token*, int);
-vec gen_vec(void *);
+void get_words(const char*);
+vec_ gen_vec(int, types[], ...);
 
 #ifdef __GNUC__
 inline

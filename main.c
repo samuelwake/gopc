@@ -5,15 +5,12 @@
 #include "lex.c"
 #include <string.h>
 
-//compile: gcc main.c -luser32 -o comp
+//compile: gcc main.c -luser32 -o gopc
 //comp.exe compile t.gop
 
 // \/ \/ \/ driver code \/ \/ \/
 int main(int argc, const char ** argv){
-    def(const char*, u, "asdasd");
-    puts(u);
     token * t;
-   
     //checks if argc is at least 2
     //this is to prevent a buffer overflow / segfault 
     //because the compiler doesn't like empty strings
