@@ -58,16 +58,16 @@ typedef union{
 typedef void ** vec_;
 
 #define vec_push(vector, type, item) { \
-    vector = (vec_)realloc(vector, _msize(vector) + sizeof(type)); \
-    size_t len = _msize(vector) / sizeof(vector[0]) - 1; \
-    *(type*)(vector + len) = item; \
+    vector = (vec_)realloc(vector, _msize(vector) + sizeof(type));\
+    size_t len = _msize(vector) / sizeof(vector[0]);\
+    *(type*)(vector + (len-1)) = item;\
  }
 
 //function declarations for lex.c
 const char * read(const char *);
 token * matchCTokens(const char*, token*, int);
 void get_words(const char*);
-vec_ gen_vec(int, types[], ...);
+vec_ gen_vec(types[], int,  ...);
 
 #ifdef __GNUC__
 inline

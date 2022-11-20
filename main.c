@@ -19,10 +19,12 @@ int main(int argc, const char ** argv){
         //case-insensitive check for --compile parameter and correct file extension
         if(stricmp(argv[1], "--compile") == 0 && strncmp(ext, ".gop", 5) == 0){
             //reads file
-           
+            types vtypes[] = {_int, _char_p};
+           vec_ vec1 = gen_vec( vtypes, 3, 2, "hullo!");
+           puts(vec1[1]);
             const char * in  = read(argv[2]);
             parse_init();
-           
+          // puts(vec1[1]);
            //makes and allocates token buffer based of length of file * size of token struct
             t = (token*)calloc(sizeof(token),strlen(in));
             //gets tokens

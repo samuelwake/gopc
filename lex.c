@@ -19,13 +19,20 @@ const char * read(const char * argv2f){
     return (const char*)rBuffer;
 }
 
-vec_ gen_vec(int items, types _types[], ...){
+vec_ gen_vec(types * _types, int items,  ...){
     vec_ newvec = (vec_)malloc(sizeof(char*));
     va_list args;
-    va_start(args, _types);
+    va_start(args, items);
     
-    for(int count = 0; (_msize(_types) / sizeof(_types[0])) > count; count++) 
-    {
+    for(int count = 0; (sizeof(_types) / sizeof(_types[0])) + 1 > count; count++) 
+    {   
+       /* if(count == 0) 
+        {
+            newvec = (vec_)malloc(items*sizeof(char*));
+            *()newvec;
+            count++;
+        }*/
+
         switch(_types[count]){
             case _int: 
             vec_push(newvec, int, va_arg(args, int));
@@ -33,12 +40,15 @@ vec_ gen_vec(int items, types _types[], ...){
             case _char_p: 
             vec_push(newvec, char*, va_arg(args, char*));
             break;
-            case _token: 
-            vec_push(newvec, token, va_arg(args, token));
-            break;
+            //case _token: 
+            //vec_push(newvec, token, va_arg(args, token));
+           // break;
+            default:
+           va_end(args); 
+            return newvec;
         }
     }
-
+    va_end(args);
     return newvec;
 }
 //matches individual character tokens to token enum
@@ -60,7 +70,6 @@ token* matchCTokens(const char * stream, token * list, int p_inc){
         case ']' : *(list+p_inc) = arr_open; break;
         default : *(list+p_inc) = 2; break;
     }
- 
     //condition for recursion:
     //when recursion is finished, return the changed token list 
     return (size_t)p_inc < len ? matchCTokens(stream, list, p_inc+1) : list;
