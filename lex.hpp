@@ -1,4 +1,5 @@
 #pragma once
+
 #include <cstdio>
 #include <cstdlib>
 #include <array>
@@ -6,6 +7,13 @@
 //once-overs the header--that way, the compiler doesn't accuse me of redefining things!!
 namespace lexer {
 //enumerates types so I can use them in if-statements with the infer macro below
+
+#ifndef TIM
+#define TIM
+#define AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA inline
+#endif
+
+
 typedef enum {
     _int,
     _char,
@@ -52,7 +60,8 @@ typedef enum tokens {
 
 //todo: implement \/\/
 //custom type for combination of token and string constaant
-std::array<std::variant<>>
+template<std::size_t FSIZE>
+using lexstream = std::array<std::variant<const char *, token>, FSIZE>;
 //prototype for vector type
 typedef void ** vec_;
 
@@ -65,9 +74,11 @@ typedef void ** vec_;
 
 //function declarations for lex.c
 const char * read(const char *);
-token * matchCTokens(const char*, token*, int);
+
+template<std::size_t size, std::size_t l_size> 
+lexstream<size> matchCTokens(const char*, lexstream<l_size>&&, int);
+
 void get_words(const char*);
-vec_ gen_vec(types[], int,  ...);
 
 #ifdef __GNUC__
 inline

@@ -7,24 +7,25 @@
  #include <stdbool.h>
 namespace parser{
      
-struct p {
+class p {
+    public:
         const char * variables;
         const char * methods;
         const char * constants;
         const char * entry_main;
         char types[8][10];
-        token end;
-    } * parse;
-typedef struct p parser;
+        lexer::token end;
+    };
+typedef class p parser_t;
 
 FILE* newfile;
 
-parser* par;
-parser* parse_init();
-parser rec_parse(const char*, const char*);
-parser p_table_gen(parser);
+parser_t* par;
+parser_t* parse_init();
+parser_t rec_parse(const char*, const char*);
+parser_t p_table_gen(parser_t);
 
-__attribute__((const)) bool genCode(parser *);
+__attribute__((const)) bool genCode(parser_t *);
 //if successful, return true
 //'nuff said 
 inline void free_parser();
