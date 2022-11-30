@@ -1,10 +1,11 @@
 #include "lex.hpp"
-#include <cstdarg>
-
 using namespace lexer;
 
- AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 
 constexpr int FSTART = 0;
+
+auto t_print = [](const auto& inval){ 
+        std::visit([](const auto &in){std::cout<<in;}, inval); 
+    };
 
 const char * lexer::read(const char * argv2f){
     //reads input file
@@ -27,7 +28,7 @@ const char * lexer::read(const char * argv2f){
 //matches individual character tokens to token enum
 //recursively adds them to token * list
 template<std::size_t size, std::size_t l_size>
-lexer::lexstream<size> lexer::matchCTokens(const char * stream, lexstream<l_size>&& list, int p_inc){
+std::unique_ptr<lexer::lexstream<size>> lexer::matchCTokens(const char * stream, lexstream<l_size> list, int p_inc){
     //get array size for string constant stream
      //dummy
 
@@ -48,14 +49,16 @@ lexer::lexstream<size> lexer::matchCTokens(const char * stream, lexstream<l_size
     }
     //condition for recursion:
     //when recursion is finished, return the changed token list 
-    return static_cast<std::size_t>(p_inc) < len ? lexer::matchCTokens<100,100>(stream, std::move(list), p_inc+1) : list;
+    return static_cast<std::size_t>(p_inc) < len ? lexer::matchCTokens<size,l_size>(stream, list, p_inc+1) : std::make_unique<lexer::lexstream<size>>(list);
 }
 
 
+
+template <std::size_t size> 
 #ifdef __GNUC__
 inline
-#endif 
-void free_read_tokens(token * list) {
+#endif
+void free_read_tokens(lexer::lexstream<size>* list) {
     free(list);
 }
 

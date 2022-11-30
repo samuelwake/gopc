@@ -4,8 +4,10 @@
 #include "lex.hpp"
 #include "lex.cpp"
 #include <string.h>
+#include <iostream>
 
-//compile: g++ main.c -luser32 -o gopc
+
+//compile: g++ main.cpp -luser32 -o gopc
 //comp.exe compile t.gop
 
 // \/ \/ \/ driver code \/ \/ \/
@@ -27,10 +29,11 @@ int main(int argc, const char ** argv){
            //makes and allocates token buffer based of length of file * size of token struct
             lexer::lexstream<100> l;
             //gets tokens
-            lexer::matchCTokens<100, 100>(in, std::move(l), FSTART);
+            auto out = lexer::matchCTokens<100, 100>(in, l, FSTART);
             int i = 0;
             //test to print tokens
-           
+          t_print((*out)[7]);
+         
            //frees all allocated buffers
             
         }

@@ -1,19 +1,15 @@
 #pragma once
 
+#include <memory>
 #include <cstdio>
 #include <cstdlib>
 #include <array>
 #include <variant>
+#include <cstdarg>
+#include <iostream>
 //once-overs the header--that way, the compiler doesn't accuse me of redefining things!!
 namespace lexer {
 //enumerates types so I can use them in if-statements with the infer macro below
-
-#ifndef TIM
-#define TIM
-#define AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA inline
-#endif
-
-
 typedef enum {
     _int,
     _char,
@@ -24,6 +20,8 @@ typedef enum {
     d_void_p,
     _token
 } types;
+
+
 //infers type of input and outputs a number that corresponds with enum provided above
 #define infer(x) _Generic((x), \
     int:_int, char:_char, \
@@ -76,13 +74,15 @@ typedef void ** vec_;
 const char * read(const char *);
 
 template<std::size_t size, std::size_t l_size> 
-lexstream<size> matchCTokens(const char*, lexstream<l_size>&&, int);
+std::unique_ptr<lexstream<size>> 
+matchCTokens(const char*, lexstream<l_size>, int);
 
 void get_words(const char*);
 
+template <std::size_t size>
 #ifdef __GNUC__
 inline
 #endif
-void free_read_tokens(token*);
+void free_read_tokens(lexstream<size>*);
 
 }
