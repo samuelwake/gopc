@@ -5,3 +5,4 @@
 using namespace parser;
 //init the parser 
 //sets size, var names, then copies to array values
+constexpr inline void parse_init(){}

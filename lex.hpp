@@ -7,6 +7,8 @@
 #include <variant>
 #include <cstdarg>
 #include <iostream>
+#include <filesystem>
+#include <fstream>
 //once-overs the header--that way, the compiler doesn't accuse me of redefining things!!
 namespace lexer {
 //enumerates types so I can use them in if-statements with the infer macro below
@@ -32,19 +34,15 @@ typedef enum {
 //assign int values to tokens 
 // -- to be used in switch-statement in lex.c
 typedef enum tokens {
+    noToken,
     start,
     end,
+    d_quote,
+    s_quote,
     arr_open,
     arr_close,
-    noToken,
     entry_main, 
     assign,
-    method,
-    array,
-    vector,
-    char_,
-    str,
-    string,
     semi_colon,
     colon,
     comma,
@@ -55,6 +53,12 @@ typedef enum tokens {
     
 } token;
 
+struct file_data {
+    size_t fsize;
+    const char* data;
+    file_data(size_t size, const char* fdata): fsize(size), data(fdata)
+    {}
+};
 //todo: implement \/\/
 //custom type for combination of token and string constaant
 template<std::size_t FSIZE>
@@ -70,7 +74,7 @@ typedef void ** vec_;
  }
 
 //function declarations for lex.c
-const char * read(const char *);
+file_data read(const char *);
 
 template<std::size_t size, std::size_t l_size> 
 std::unique_ptr<lexstream<size>> 

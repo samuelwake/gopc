@@ -8,7 +8,8 @@
 
 
 //compile: g++ main.cpp -luser32 -o gopc
-//comp.exe compile t.gop
+//gopc compile t.gop
+//combined: g++ main.cpp -luser32 -o gopc && ./gopc --compile t.gop
 
 // \/ \/ \/ driver code \/ \/ \/
 int main(int argc, const char ** argv){
@@ -20,15 +21,12 @@ int main(int argc, const char ** argv){
         //case-insensitive check for --compile parameter and correct file extension
         if(stricmp(argv[1], "--compile") == 0 && strncmp(ext, ".gop", 5) == 0){
             //reads file
-          
-    
-        
-            const char * in = lexer::read(argv[2]);
-    
+            lexer::file_data in = lexer::read(argv[2]);
+            const size_t size = in.fsize;
             lexer::lexstream<100> l;
             //gets tokens
-            auto out = lexer::matchCTokens<100, 100>(in, l, FSTART);
-     
+            
+            auto out = lexer::matchCTokens<100, 100>(in.data, l, FSTART);
             //test to print tokens
             for (int i = 0; i<out->size()-1; i++)
           t_print((*out)[i]);

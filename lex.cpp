@@ -9,7 +9,7 @@ auto t_print = [](const auto& inval){
             }, inval); 
     };
 
-const char * lexer::read(const char * argv2f){
+lexer::file_data lexer::read(const char * argv2f){
     //reads input file
     
     //opens src file
@@ -21,10 +21,12 @@ const char * lexer::read(const char * argv2f){
         //allocating string / char* buffer 
         //to be used for reading the input file
         char * rBuffer = (char*)calloc(1, fsize+3);
+        
         fread(rBuffer, sizeof(char), fsize+1, infile);
+        file_data fdata(fsize, static_cast<const char*>(rBuffer));
         fclose(infile);
 
-    return (const char*)rBuffer;
+    return fdata;
 }
 //hola
 //matches individual character tokens to token enum
@@ -48,6 +50,8 @@ lexer::matchCTokens(const char * stream, lexstream<l_size> list, int p_inc){
         case '}' : list[p_inc] = end; break;
         case '[' : list[p_inc] = arr_open; break;
         case ']' : list[p_inc] = arr_close; break;
+        case '"' : list[p_inc] = d_quote; break;
+        case '\'' : list[p_inc] = s_quote; break;
         default : list[p_inc] = stream[p_inc]; break;
     }
     //condition for recursion:
