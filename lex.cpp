@@ -4,7 +4,9 @@ using namespace lexer;
 constexpr int FSTART = 0;
 
 auto t_print = [](const auto& inval){ 
-        std::visit([](const auto &in){std::cout<<in;}, inval); 
+        std::visit( [](const auto &in){
+            std::cout<<in;
+            }, inval); 
     };
 
 const char * lexer::read(const char * argv2f){
@@ -19,7 +21,7 @@ const char * lexer::read(const char * argv2f){
         //allocating string / char* buffer 
         //to be used for reading the input file
         char * rBuffer = (char*)calloc(1, fsize+3);
-        fread(rBuffer, sizeof(char), fsize+3, infile);
+        fread(rBuffer, sizeof(char), fsize+1, infile);
         fclose(infile);
 
     return (const char*)rBuffer;
@@ -28,7 +30,8 @@ const char * lexer::read(const char * argv2f){
 //matches individual character tokens to token enum
 //recursively adds them to token * list
 template<std::size_t size, std::size_t l_size>
-std::unique_ptr<lexer::lexstream<size>> lexer::matchCTokens(const char * stream, lexstream<l_size> list, int p_inc){
+std::unique_ptr<lexer::lexstream<size>> 
+lexer::matchCTokens(const char * stream, lexstream<l_size> list, int p_inc){
     //get array size for string constant stream
      //dummy
 
@@ -44,14 +47,15 @@ std::unique_ptr<lexer::lexstream<size>> lexer::matchCTokens(const char * stream,
         case '{' : list[p_inc] = start; break;
         case '}' : list[p_inc] = end; break;
         case '[' : list[p_inc] = arr_open; break;
-        case ']' : list[p_inc] = arr_open; break;
-        default : list[p_inc] = end; break;
+        case ']' : list[p_inc] = arr_close; break;
+        default : list[p_inc] = stream[p_inc]; break;
     }
     //condition for recursion:
     //when recursion is finished, return the changed token list 
-    return static_cast<std::size_t>(p_inc) < len ? lexer::matchCTokens<size,l_size>(stream, list, p_inc+1) : std::make_unique<lexer::lexstream<size>>(list);
+    return static_cast<std::size_t>(p_inc) < len ? 
+        lexer::matchCTokens<size,l_size>(stream, list, p_inc+1) : 
+        std::make_unique<lexer::lexstream<size>>(list);
 }
-
 
 
 template <std::size_t size> 

@@ -7,7 +7,7 @@
  #include <stdbool.h>
 namespace parser{
      
-class p {
+struct p {
     public:
         const char * variables;
         const char * methods;
@@ -16,9 +16,9 @@ class p {
         char types[8][10];
         lexer::token end;
     };
-typedef class p parser_t;
+typedef struct p parser_t;
 
-FILE* newfile;
+FILE* newfile = nullptr;
 
 parser_t* par;
 parser_t* parse_init();

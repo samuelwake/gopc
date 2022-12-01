@@ -21,7 +21,6 @@ typedef enum {
     _token
 } types;
 
-
 //infers type of input and outputs a number that corresponds with enum provided above
 #define infer(x) _Generic((x), \
     int:_int, char:_char, \
@@ -59,7 +58,7 @@ typedef enum tokens {
 //todo: implement \/\/
 //custom type for combination of token and string constaant
 template<std::size_t FSIZE>
-using lexstream = std::array<std::variant<const char *, token>, FSIZE>;
+using lexstream = std::array<std::variant<const char *, token, char>, FSIZE>;
 //prototype for vector type
 typedef void ** vec_;
 

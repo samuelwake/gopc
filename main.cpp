@@ -24,15 +24,14 @@ int main(int argc, const char ** argv){
     
         
             const char * in = lexer::read(argv[2]);
-          
-          // puts(vec1[1]);
-           //makes and allocates token buffer based of length of file * size of token struct
+    
             lexer::lexstream<100> l;
             //gets tokens
             auto out = lexer::matchCTokens<100, 100>(in, l, FSTART);
-            int i = 0;
+     
             //test to print tokens
-          t_print((*out)[7]);
+            for (int i = 0; i<out->size()-1; i++)
+          t_print((*out)[i]);
          
            //frees all allocated buffers
             
